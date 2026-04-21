@@ -91,6 +91,17 @@ That makes this repository useful for engineers interested in:
 ### 1. Product Architecture
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{
+  'background':'#0b1020',
+  'primaryColor':'#13203a',
+  'primaryTextColor':'#e5eefc',
+  'primaryBorderColor':'#60a5fa',
+  'lineColor':'#7dd3fc',
+  'secondaryColor':'#0f1b33',
+  'secondaryTextColor':'#dbeafe',
+  'tertiaryColor':'#0b1328',
+  'tertiaryTextColor':'#c7d2fe'
+}}}%%
 graph TD
     User["User / Analyst"] --> Web["Next.js Workspace"]
     Web --> API["FastAPI Platform API"]
@@ -103,11 +114,37 @@ graph TD
     API --> Workspace["Workspace Persistence"]
     Runner --> DuckDB["DuckDB Dataset"]
     Workspace --> Meta["SQLite or Postgres Metadata"]
+
+    classDef user fill:#1d4ed8,stroke:#93c5fd,color:#eff6ff,stroke-width:2px;
+    classDef frontend fill:#7c3aed,stroke:#c4b5fd,color:#f5f3ff,stroke-width:2px;
+    classDef backend fill:#0f766e,stroke:#5eead4,color:#ecfeff,stroke-width:2px;
+    classDef logic fill:#7c2d12,stroke:#fdba74,color:#fff7ed,stroke-width:2px;
+    classDef trust fill:#14532d,stroke:#86efac,color:#f0fdf4,stroke-width:2px;
+    classDef storage fill:#312e81,stroke:#a5b4fc,color:#eef2ff,stroke-width:2px;
+
+    class User user;
+    class Web frontend;
+    class API backend;
+    class Planner,Semantic,Validator,Summarizer logic;
+    class Quality trust;
+    class Runner,Workspace backend;
+    class DuckDB,Meta storage;
 ```
 
 ### 2. Request Lifecycle
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{
+  'background':'#0b1020',
+  'primaryColor':'#111827',
+  'primaryTextColor':'#f8fafc',
+  'primaryBorderColor':'#60a5fa',
+  'lineColor':'#38bdf8',
+  'secondaryColor':'#172554',
+  'secondaryTextColor':'#dbeafe',
+  'tertiaryColor':'#0f172a',
+  'tertiaryTextColor':'#e2e8f0'
+}}}%%
 flowchart LR
     A["User asks business question"] --> B["Frontend sends query intent"]
     B --> C["Planner receives semantic context"]
@@ -118,11 +155,33 @@ flowchart LR
     G --> H["Insight summarizer explains result"]
     H --> I["Workspace can be persisted"]
     I --> J["User reviews SQL, charts, table, and trust signals"]
+
+    classDef ask fill:#2563eb,stroke:#93c5fd,color:#eff6ff,stroke-width:2px;
+    classDef app fill:#7c3aed,stroke:#c4b5fd,color:#f5f3ff,stroke-width:2px;
+    classDef compute fill:#0f766e,stroke:#5eead4,color:#ecfeff,stroke-width:2px;
+    classDef trust fill:#b45309,stroke:#fcd34d,color:#fffbeb,stroke-width:2px;
+    classDef outcome fill:#be185d,stroke:#f9a8d4,color:#fff1f2,stroke-width:2px;
+
+    class A ask;
+    class B,C,D,E,F,G compute;
+    class H,I app;
+    class J outcome;
 ```
 
 ### 3. Trust and Governance Model
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{
+  'background':'#0b1020',
+  'primaryColor':'#13203a',
+  'primaryTextColor':'#e5eefc',
+  'primaryBorderColor':'#60a5fa',
+  'lineColor':'#34d399',
+  'secondaryColor':'#0f1b33',
+  'secondaryTextColor':'#dbeafe',
+  'tertiaryColor':'#0b1328',
+  'tertiaryTextColor':'#c7d2fe'
+}}}%%
 graph LR
     Metric["Metric definitions"] --> Plan["Planned SQL"]
     Schema["Known tables and columns"] --> Plan
@@ -133,6 +192,14 @@ graph LR
     Result --> Narrative["Narrative insight"]
     Result --> Quality["Quality status"]
     Result --> Lineage["Lineage visibility"]
+
+    classDef governance fill:#7c2d12,stroke:#fdba74,color:#fff7ed,stroke-width:2px;
+    classDef safety fill:#14532d,stroke:#86efac,color:#f0fdf4,stroke-width:2px;
+    classDef output fill:#1d4ed8,stroke:#93c5fd,color:#eff6ff,stroke-width:2px;
+
+    class Metric,Schema,Joins governance;
+    class Plan,AST,Safe safety;
+    class Result,Narrative,Quality,Lineage output;
 ```
 
 ---
