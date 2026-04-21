@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.pytest_cache/
+__pycache__/
+*.pyc
+
+apps/api/venv/
+apps/web/node_modules/
+apps/web/.next/
+
+datasets/*.db
+datasets/*.duckdb.wal
+
+coverage/
