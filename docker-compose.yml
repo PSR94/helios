@@ -1,0 +1,83 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: helios_postgres
+    environment:
+      POSTGRES_USER: helios
+      POSTGRES_PASSWORD: helios_password
+      POSTGRES_DB: helios_meta
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U helios -d helios_meta"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: helios_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # minio:
+  #   image: minio/minio:RELEASE.2023-11-20T22-40-07Z
+  #   container_name: helios_minio
+  #   environment:
+  #     MINIO_ROOT_USER: helios_admin
+  #     MINIO_ROOT_PASSWORD: helios_password
+  #   command: server /data --console-address ":9001"
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   volumes:
+  #     - minio_data:/data
+
+  # api:
+  #   build:
+  #     context: ./apps/api
+  #   container_name: helios_api
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - DATABASE_URL=postgresql://helios:helios_password@postgres:5432/helios_meta
+  #     - REDIS_URL=redis://redis:6379/0
+  #     - ENVIRONMENT=local
+  #   volumes:
+  #     - ./apps/api:/app
+  #     - ./datasets:/datasets
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+
+  # web:
+  #   build:
+  #     context: ./apps/web
+  #   container_name: helios_web
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NEXT_PUBLIC_API_URL=http://localhost:8000
+  #   volumes:
+  #     - ./apps/web:/app
+  #     - /app/node_modules
+  #   depends_on:
+  #     - api
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
