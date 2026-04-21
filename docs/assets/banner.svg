@@ -1,0 +1,45 @@
+<svg width="1200" height="400" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="400" fill="url(#bgGrad)" />
+  <rect width="1200" height="400" fill="url(#grid)" />
+
+  <!-- Abstract Graphic Elements representing Data/Analytics -->
+  <g transform="translate(150, 100)" stroke-opacity="0.8">
+    <path d="M 0 150 Q 150 50, 300 120 T 600 80 T 900 100" fill="none" stroke="url(#textGrad)" stroke-width="4" filter="url(#glow)"/>
+    <path d="M 0 180 Q 150 100, 300 150 T 600 120 T 900 130" fill="none" stroke="#34d399" stroke-width="2" stroke-opacity="0.6"/>
+    
+    <!-- Data Points -->
+    <circle cx="300" cy="120" r="6" fill="#38bdf8" filter="url(#glow)"/>
+    <circle cx="600" cy="80" r="6" fill="#818cf8" filter="url(#glow)"/>
+    <circle cx="900" cy="100" r="6" fill="#38bdf8" filter="url(#glow)"/>
+  </g>
+
+  <!-- Typography -->
+  <text x="600" y="220" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="72" font-weight="900" fill="url(#textGrad)" text-anchor="middle" letter-spacing="8">HELIOS</text>
+  <text x="600" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#cbd5e1" text-anchor="middle" letter-spacing="2">AI ANALYTICS ENGINEERING COPILOT</text>
+  
+  <rect x="525" y="310" width="150" height="30" rx="15" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="600" y="331" font-family="monospace" font-size="14" font-weight="bold" fill="#38bdf8" text-anchor="middle">NL2SQL READY</text>
+</svg>
