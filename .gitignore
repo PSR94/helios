@@ -9,6 +9,9 @@ apps/web/node_modules/
 apps/web/.next/
 
 datasets/*.db
+datasets/*.duckdb
 datasets/*.duckdb.wal
 
 coverage/
+tmp/
+output/
