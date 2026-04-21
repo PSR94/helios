@@ -1,0 +1,81 @@
+# HELIOS Semantic Layer Definition
+# Describes datasets, dimensions, and measures for the Nl2SQL Planner
+
+datasets:
+  - name: users
+    description: "Core user accounts and demographic information."
+    table: users
+    owner: data_platform
+    freshness: "daily"
+    columns:
+      - name: user_id
+        type: int
+        description: "Primary key"
+      - name: signup_date
+        type: date
+        description: "Date the user registered"
+      - name: country
+        type: string
+        description: "User country code (e.g., US, UK)"
+      - name: acquisition_channel
+        type: string
+        description: "Marketing channel"
+
+  - name: subscriptions
+    description: "Active and historical user subscriptions."
+    table: subscriptions
+    owner: finance
+    freshness: "hourly"
+    columns:
+      - name: user_id
+        type: int
+        description: "Foreign key to users"
+      - name: plan_tier
+        type: string
+        description: "Subscription tier: Starter, Pro, Enterprise"
+      - name: mrr
+        type: float
+        description: "Monthly recurring revenue in USD"
+      - name: status
+        type: string
+        description: "Current status: Active, Past Due, Canceled"
+    joins:
+      - to: users
+        type: left
+        sql_on: "subscriptions.user_id = users.user_id"
+
+  - name: events
+    description: "Application usage events."
+    table: events
+    owner: product
+    freshness: "real-time"
+    columns:
+      - name: event_id
+        type: int
+      - name: user_id
+        type: int
+      - name: event_date
+        type: date
+      - name: event_type
+        type: string
+        description: "login, view_dashboard, run_query, export_data"
+
+metrics:
+  - name: active_users
+    description: "Number of unique users who have logged in."
+    type: count_distinct
+    sql: "events.user_id"
+    filters:
+      - "events.event_type = 'login'"
+
+  - name: total_mrr
+    description: "Total Monthly Recurring Revenue from active subscriptions."
+    type: sum
+    sql: "subscriptions.mrr"
+    filters:
+      - "subscriptions.status = 'Active'"
+
+  - name: churn_rate
+    description: "Percentage of canceled subscriptions."
+    type: derived
+    sql: "SUM(CASE WHEN subscriptions.status = 'Canceled' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)"
