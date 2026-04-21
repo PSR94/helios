@@ -14,6 +14,7 @@
   <a href="https://fastapi.tiangolo.com/"><img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-API-009688?style=for-the-badge&logo=fastapi&logoColor=white"></a>
   <a href="https://duckdb.org/"><img alt="DuckDB" src="https://img.shields.io/badge/DuckDB-Analytics-FDCB2F?style=for-the-badge&logo=duckdb&logoColor=1a1a1a"></a>
   <a href="https://openai.com/"><img alt="OpenAI-compatible" src="https://img.shields.io/badge/OpenAI-Compatible-412991?style=for-the-badge&logo=openai&logoColor=white"></a>
+  <img alt="CI" src="https://img.shields.io/github/actions/workflow/status/PSR94/helios/ci.yml?style=for-the-badge&label=CI">
   <img alt="Status" src="https://img.shields.io/badge/Status-Production%20Baseline-0F766E?style=for-the-badge">
 </p>
 
@@ -389,6 +390,19 @@ make web-dev
 make test
 ```
 
+### Continuous Integration
+
+The repository includes a GitHub Actions workflow that:
+
+- installs backend dependencies on Python 3.11
+- runs the FastAPI test suite
+- installs frontend dependencies with `npm ci`
+- builds the Next.js application in production mode
+
+Workflow file:
+
+- [ci.yml](./.github/workflows/ci.yml)
+
 ### Runtime Notes
 
 - Metadata uses local SQLite by default via `datasets/helios_meta.db`
@@ -480,6 +494,7 @@ The project also shows how a modern AI feature can be composed across:
 ## Supporting Documents
 
 - [Architecture Notes](./docs/architecture.md)
+- [Documentation Map](./docs/README.md)
 - [Platform Overview](./Design%20Doc/platform_overview.md)
 - [Full Design Specification](./Design%20Doc/HELIOS_Full_Design_Specification.md)
 
@@ -487,4 +502,4 @@ The project also shows how a modern AI feature can be composed across:
 
 ## License
 
-Choose and add an explicit public license before treating this repository as open source. Right now the repository does not include a license grant.
+This project is licensed under the [MIT License](./LICENSE).
