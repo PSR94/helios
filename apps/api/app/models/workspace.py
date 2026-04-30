@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean
 from datetime import datetime
 from app.models.base import Base
 
@@ -10,6 +10,7 @@ class SavedWorkspace(Base):
     generated_sql = Column(Text, nullable=False)
     insight_narrative = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    is_pinned = Column(Boolean, default=False)
     
     # We store the result payload as a JSON string for simplicity in this demo
     # In a real app, you might store result metadata or reference a cache key
