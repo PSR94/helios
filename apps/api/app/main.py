@@ -16,6 +16,9 @@ from app.db.session import engine
 from app.models import workspace
 from app.models.base import Base
 
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from redis import asyncio as aioredis
 
 logging.basicConfig(
     level=getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO),
@@ -27,6 +30,11 @@ logger = logging.getLogger("helios.api")
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     Base.metadata.create_all(bind=engine)
+    
+    # Initialize Redis caching
+    redis = aioredis.from_url(settings.REDIS_URL, encoding="utf8", decode_responses=True)
+    FastAPICache.init(RedisBackend(redis), prefix="helios-cache")
+    
     logger.info("HELIOS API startup complete")
     yield
     logger.info("HELIOS API shutdown complete")

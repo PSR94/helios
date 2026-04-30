@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 import duckdb
+from fastapi_cache.decorator import cache
 from app.core.config import settings
 import os
 import re
@@ -12,6 +13,7 @@ def get_duckdb_conn():
     return duckdb.connect(str(settings.duckdb_path), read_only=True)
 
 @router.get("/datasets")
+@cache(expire=300)
 def list_datasets():
     try:
         with get_duckdb_conn() as conn:
@@ -21,6 +23,7 @@ def list_datasets():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/datasets/{id}/columns")
+@cache(expire=300)
 def get_dataset_columns(id: str):
     try:
         if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", id):
