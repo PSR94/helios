@@ -84,19 +84,20 @@ export default function ExecutiveDashboard() {
   return (
     <div className="h-full flex flex-col bg-background overflow-y-auto">
       <div className="p-8 mx-auto w-full max-w-7xl space-y-8">
-        <div className="flex items-center justify-between border-b pb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-primary/10 rounded-lg">
+        <div className="flex items-center justify-between border-b border-white/10 pb-6 relative">
+          <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full"></div>
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="p-3 bg-primary/20 border border-primary/30 rounded-xl shadow-[0_0_15px_rgba(56,189,248,0.2)]">
               <LayoutDashboard className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Executive Dashboard</h1>
-              <p className="text-muted-foreground mt-1">Your pinned metrics and high-level KPIs.</p>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Executive Dashboard</h1>
+              <p className="text-muted-foreground mt-1 font-medium">Your pinned metrics and high-level KPIs.</p>
             </div>
           </div>
           <button 
             onClick={fetchWorkspaces}
-            className="flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 text-foreground font-medium rounded-xl hover:bg-white/10 hover:shadow-lg transition-all relative z-10"
           >
             <RefreshCw className="w-4 h-4" /> Refresh
           </button>
@@ -113,18 +114,18 @@ export default function ExecutiveDashboard() {
              <p className="mt-2">Pin queries from your Saved Workspaces to build your dashboard.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {pinnedWorkspaces.map(w => (
-              <div key={w.id} className="rounded-xl border bg-card shadow-sm flex flex-col h-[450px]">
-                <div className="px-6 py-4 border-b bg-muted/20">
-                  <h3 className="font-semibold text-lg line-clamp-1" title={w.user_query}>{w.user_query}</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {pinnedWorkspaces.map((w, index) => (
+              <div key={w.id} className="rounded-2xl border border-white/10 bg-black/20 backdrop-blur-md shadow-xl flex flex-col h-[450px] group hover:border-primary/30 hover:shadow-[0_0_30px_rgba(56,189,248,0.1)] transition-all duration-500 animate-in fade-in slide-in-from-bottom-8" style={{ animationDelay: `${index * 100}ms` }}>
+                <div className="px-6 py-5 border-b border-white/5 bg-white/5 rounded-t-2xl">
+                  <h3 className="font-bold text-lg line-clamp-1 text-foreground/90 group-hover:text-primary transition-colors" title={w.user_query}>{w.user_query}</h3>
                   {w.insight_narrative && (
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2 italic">
+                    <p className="text-sm text-muted-foreground mt-1.5 line-clamp-2 italic font-medium">
                       "{w.insight_narrative}"
                     </p>
                   )}
                 </div>
-                <div className="flex-1 p-6 min-h-0">
+                <div className="flex-1 p-6 min-h-0 bg-gradient-to-b from-transparent to-black/10">
                    {renderChart(w)}
                 </div>
               </div>
