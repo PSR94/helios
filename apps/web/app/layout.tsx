@@ -20,42 +20,42 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="flex h-screen overflow-hidden">
           {/* Main Sidebar */}
-          <aside className="w-64 border-r bg-muted/20 flex flex-col">
-            <div className="h-14 flex items-center px-4 border-b">
-              <span className="font-bold text-lg tracking-wider text-primary">HELIOS</span>
+          <aside className="w-64 border-r border-white/5 bg-black/20 backdrop-blur-xl flex flex-col relative z-20">
+            <div className="h-16 flex items-center px-6 border-b border-white/5">
+              <span className="font-black text-xl tracking-widest bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent drop-shadow-sm">HELIOS</span>
             </div>
             <nav className="flex-1 p-4 space-y-2 text-sm text-muted-foreground">
-              <a href="/" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
-                Workspace
+              <a href="/" className="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-all duration-200 group">
+                <span className="group-hover:scale-110 transition-transform">Workspace</span>
               </a>
-              <a href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
-                Executive Dashboard
+              <a href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 hover:text-foreground transition-all duration-200 group">
+                <span className="group-hover:translate-x-1 transition-transform">Executive Dashboard</span>
               </a>
-              <a href="/lineage" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
-                Semantic Lineage
+              <a href="/lineage" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 hover:text-foreground transition-all duration-200 group">
+                <span className="group-hover:translate-x-1 transition-transform">Semantic Lineage</span>
               </a>
-              <a href="/metrics" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
-                Metric Catalog
+              <a href="/metrics" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 hover:text-foreground transition-all duration-200 group">
+                <span className="group-hover:translate-x-1 transition-transform">Metric Catalog</span>
               </a>
-              <a href="/saved" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
-                Saved Workspaces
+              <a href="/saved" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 hover:text-foreground transition-all duration-200 group">
+                <span className="group-hover:translate-x-1 transition-transform">Saved Workspaces</span>
               </a>
-              <a href="/schema" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
-                Schema Explorer
+              <a href="/schema" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 hover:text-foreground transition-all duration-200 group">
+                <span className="group-hover:translate-x-1 transition-transform">Schema Explorer</span>
               </a>
-              <a href="/quality" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
-                Data Quality Center
+              <a href="/quality" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 hover:text-foreground transition-all duration-200 group">
+                <span className="group-hover:translate-x-1 transition-transform">Data Quality Center</span>
               </a>
             </nav>
-            <div className="p-4 border-t text-xs text-muted-foreground/70">
+            <div className="p-4 border-t border-white/5 text-xs text-muted-foreground/50 font-medium">
               Environment: Local
             </div>
           </aside>
           
           {/* Main Content Area */}
-          <main className="flex-1 flex flex-col relative overflow-hidden bg-background">
-            <header className="h-14 border-b flex items-center justify-between px-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">
-              <h1 className="font-medium">Analytics Workspace</h1>
+          <main className="flex-1 flex flex-col relative overflow-hidden bg-transparent">
+            <header className="h-16 border-b border-white/5 flex items-center justify-between px-6 bg-black/10 backdrop-blur-md z-10 shadow-sm">
+              <h1 className="font-semibold text-lg text-foreground/90">Analytics Workspace</h1>
               <div className="flex items-center gap-4">
                 <SystemHealthBadge />
               </div>
