@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { History, Search, Clock, ChevronRight, Terminal, RefreshCw } from "lucide-react"
+import { History, Search, Clock, ChevronRight, Terminal, RefreshCw, Trash2, Loader2 } from "lucide-react"
 import { apiUrl } from "../../lib/api"
 
 type Workspace = {
@@ -15,6 +15,7 @@ type Workspace = {
 export default function SavedWorkspaces() {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
 
   const fetchWorkspaces = async () => {
@@ -27,6 +28,19 @@ export default function SavedWorkspaces() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation(); // prevent clicking the card
+    setDeletingId(id);
+    try {
+      await fetch(apiUrl(`/api/v1/workspaces/${id}`), { method: "DELETE" });
+      setWorkspaces(prev => prev.filter(w => w.id !== id));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -86,7 +100,16 @@ export default function SavedWorkspaces() {
                          <span className="flex items-center gap-1 uppercase tracking-wider"><Terminal className="w-3 h-3" /> SQL Validated</span>
                       </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 opacity-20 group-hover:opacity-100 transition-all" />
+                    <div className="flex items-center gap-3">
+                      <button 
+                        onClick={(e) => handleDelete(e, w.id)}
+                        disabled={deletingId === w.id}
+                        className="p-2 rounded-md hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors disabled:opacity-50"
+                      >
+                        {deletingId === w.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                      </button>
+                      <ChevronRight className="w-5 h-5 opacity-20 group-hover:opacity-100 transition-all" />
+                    </div>
                   </div>
                   
                   {w.insight_narrative && (

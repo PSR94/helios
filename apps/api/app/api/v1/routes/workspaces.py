@@ -38,3 +38,15 @@ def save_workspace(data: WorkspaceCreate, db: Session = Depends(get_db)):
 def list_workspaces(db: Session = Depends(get_db)):
     workspaces = db.query(SavedWorkspace).order_by(SavedWorkspace.created_at.desc()).all()
     return workspaces
+
+from fastapi import HTTPException
+
+@router.delete("/{workspace_id}", status_code=204)
+def delete_workspace(workspace_id: int, db: Session = Depends(get_db)):
+    db_workspace = db.query(SavedWorkspace).filter(SavedWorkspace.id == workspace_id).first()
+    if not db_workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    db.delete(db_workspace)
+    db.commit()
+    return None
