@@ -55,3 +55,26 @@ def explain_query(request: QueryExplainRequest):
         return {"insight": insight}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+import csv
+import io
+from fastapi.responses import StreamingResponse
+
+@router.post("/export")
+def export_query(request: QueryRunRequest):
+    try:
+        execution_result = query_runner.execute(request.sql)
+        columns = execution_result["columns"]
+        rows = execution_result["rows"]
+
+        stream = io.StringIO()
+        writer = csv.writer(stream)
+        writer.writerow(columns)
+        for row in rows:
+            writer.writerow(row)
+        
+        response = StreamingResponse(iter([stream.getvalue()]), media_type="text/csv")
+        response.headers["Content-Disposition"] = "attachment; filename=export.csv"
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

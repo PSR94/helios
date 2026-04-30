@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { Sparkles, Terminal, Database, LineChart as LineChartIcon, Play, AlertCircle, CheckCircle2, ChevronRight, Loader2, Bookmark } from "lucide-react";
+import { Sparkles, Terminal, Database, LineChart as LineChartIcon, Play, AlertCircle, CheckCircle2, ChevronRight, Loader2, Bookmark, Download } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { apiUrl } from "../lib/api";
 
@@ -18,8 +18,35 @@ export default function AnalyticsWorkspace() {
   const [isExplaining, setIsExplaining] = useState(false);
   const [insight, setInsight] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleExport = async () => {
+    if (!planResult?.sql) return;
+    setIsExporting(true);
+    try {
+      const res = await fetch(apiUrl("/api/v1/query/export"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sql: planResult.sql }),
+      });
+      if (!res.ok) throw new Error("Export failed");
+      
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "helios_export.csv";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const handleSave = async () => {
     if (!runResult || !planResult) return;
@@ -251,16 +278,20 @@ export default function AnalyticsWorkspace() {
                 <div className="flex items-center gap-4">
                   <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">Execution time: {runResult.time}ms</span>
                   <button 
+                    onClick={handleExport}
+                    disabled={isExporting}
+                    className="flex items-center gap-2 px-3 py-1 bg-secondary text-secondary-foreground border border-secondary rounded-md text-xs hover:bg-secondary/80 transition-all disabled:opacity-50"
+                  >
+                    {isExporting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Download className="w-3 h-3" />}
+                    CSV
+                  </button>
+                  <button 
                     onClick={handleSave}
-                    disabled={isSaving || isSaved}
-                    className={`flex items-center gap-2 px-3 py-1 rounded-md text-xs transition-all ${
-                      isSaved 
-                      ? "bg-green-500/10 text-green-500 border border-green-500/20" 
-                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                    }`}
+                    disabled={isSaving}
+                    className="flex items-center gap-2 px-3 py-1 bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-md text-xs transition-all disabled:opacity-50"
                   >
                     {isSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Bookmark className="w-3 h-3" />}
-                    {isSaved ? "Saved" : "Save Workspace"}
+                    Save
                   </button>
                 </div>
               </div>
