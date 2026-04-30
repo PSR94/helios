@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { History, Search, Clock, ChevronRight, Terminal, RefreshCw, Trash2, Loader2 } from "lucide-react"
+import { History, Search, Clock, ChevronRight, Terminal, RefreshCw, Trash2, Loader2, Pin } from "lucide-react"
 import { apiUrl } from "../../lib/api"
 
 type Workspace = {
@@ -10,12 +10,14 @@ type Workspace = {
   generated_sql: string;
   insight_narrative: string | null;
   created_at: string;
+  is_pinned: boolean;
 }
 
 export default function SavedWorkspaces() {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [pinningId, setPinningId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
 
   const fetchWorkspaces = async () => {
@@ -28,6 +30,25 @@ export default function SavedWorkspaces() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePin = async (e: React.MouseEvent, id: number, currentStatus: boolean) => {
+    e.stopPropagation();
+    setPinningId(id);
+    try {
+      const res = await fetch(apiUrl(`/api/v1/workspaces/${id}/pin`), {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_pinned: !currentStatus })
+      });
+      if (res.ok) {
+        setWorkspaces(prev => prev.map(w => w.id === id ? { ...w, is_pinned: !currentStatus } : w));
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setPinningId(null);
     }
   };
 
@@ -102,9 +123,18 @@ export default function SavedWorkspaces() {
                     </div>
                     <div className="flex items-center gap-3">
                       <button 
+                        onClick={(e) => handlePin(e, w.id, w.is_pinned)}
+                        disabled={pinningId === w.id}
+                        className={`p-2 rounded-md transition-colors disabled:opacity-50 ${w.is_pinned ? 'bg-primary/20 text-primary' : 'hover:bg-primary/10 text-muted-foreground hover:text-primary'}`}
+                        title="Pin to Dashboard"
+                      >
+                        {pinningId === w.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Pin className={`w-4 h-4 ${w.is_pinned ? 'fill-primary' : ''}`} />}
+                      </button>
+                      <button 
                         onClick={(e) => handleDelete(e, w.id)}
                         disabled={deletingId === w.id}
                         className="p-2 rounded-md hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors disabled:opacity-50"
+                        title="Delete Workspace"
                       >
                         {deletingId === w.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                       </button>

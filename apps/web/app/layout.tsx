@@ -25,8 +25,11 @@ export default function RootLayout({
               <span className="font-bold text-lg tracking-wider text-primary">HELIOS</span>
             </div>
             <nav className="flex-1 p-4 space-y-2 text-sm text-muted-foreground">
-              <a href="/" className="flex items-center gap-3 px-3 py-2 rounded-md bg-secondary text-secondary-foreground font-medium">
+              <a href="/" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
                 Workspace
+              </a>
+              <a href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
+                Executive Dashboard
               </a>
               <a href="/lineage" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/50 hover:text-foreground transition-colors">
                 Semantic Lineage
